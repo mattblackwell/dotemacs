@@ -1009,6 +1009,8 @@ Keep track of ERC buffers in which new messages have been posted.
 
 ** Ivy, Counsel and Swiper
 
+*** Ivy
+
 #+BEGIN_QUOTE
 Ivy is a generic completion mechanism for Emacs. While it operates similarly to
 other completion schemes such as =icomplete-mode=, Ivy aims to be more
@@ -1023,6 +1025,8 @@ efficient, smaller, simpler, and smoother to use yet highly customizable.
   :config
   (ivy-mode 1))
 #+END_SRC
+
+*** Counsel
 
 #+BEGIN_QUOTE
 Counsel takes this further, providing versions of common Emacs commands that are
@@ -1041,12 +1045,14 @@ directory.
     (setq-default counsel-ag-base-command "ag --vimgrep --nocolor --nogroup %s"))
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
+*** Swiper
+
+#+BEGIN_QUOTE
 Swiper is an alternative to isearch that uses ivy to show an overview of all
 matches.
 
 [[https://github.com/abo-abo/swiper][Oleh Krehel]]
-#+END_SRC
+#+END_QUOTE
 
 #+BEGIN_SRC emacs-lisp
 (use-package swiper :after ivy)
