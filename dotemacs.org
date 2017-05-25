@@ -28,11 +28,10 @@
   - [[#expand][Expand]]
   - [[#exwm][EXWM]]
   - [[#folding][Folding]]
-  - [[#helm][Helm]]
-  - [[#helm-plugins][Helm Plugins]]
   - [[#help][Help]]
   - [[#hydra][Hydra]]
   - [[#irc][IRC]]
+  - [[#ivy-counsel-and-swiper][Ivy, Counsel and Swiper]]
   - [[#linters][Linters]]
   - [[#mode-line][Mode-Line]]
   - [[#navigation][Navigation]]
@@ -674,178 +673,6 @@ This is a package to perform text folding like in Vim. It has the following feat
   (setq-default vimish-fold-header-width 79))
 #+END_SRC
 
-** Helm
-
-Helm is a beast. Although heavily, it replaces =ido-mode= in many ways.
-
-#+BEGIN_QUOTE
-=Helm= is an Emacs framework for incremental completions and narrowing selections. It
-helps to rapidly complete file names, buffer names, or any other Emacs interactions
-requiring selecting an item from a list of possible choices.
-
-Helm is a fork of =anything.el=, which was originally written by Tamas Patrovic and
-can be considered to be its successor. =Helm= cleans the legacy code that is leaner,
-modular, and unchained from constraints of backward compatibility.
-
-[[https://github.com/emacs-helm/helm][Bozhidar Batsov]]
-#+END_QUOTE
-
-- *TODO*: Add a flashing effect with Helm actions
-          =(progn (require 'pulse) (pulse-momentary-highlight-one-line (point))=.
-
-#+BEGIN_SRC emacs-lisp
-(use-package helm
-  :defer 1
-  :config
-  (helm-mode 1)
-  (setq-default
-   helm-always-two-windows t
-   helm-display-header-line nil
-   helm-split-window-default-side 'left)
-  (zenburn-with-color-variables
-    (set-face-attribute 'helm-match nil :background nil :foreground zenburn-orange)
-    (set-face-attribute 'helm-prefarg nil :foreground zenburn-magenta)
-    (set-face-attribute 'helm-source-header nil
-                        :box nil
-                        :background nil
-                        :height me/font-size-title)))
-#+END_SRC
-
-Helm sub-modules can be customized separately. Many basic Emacs commands have their
-Helm equivalents.
-
-- *TODO*: Do I actually want to split all of these?
-- *TODO*: Help buffer resizes the frame when killed.
-
-#+BEGIN_SRC emacs-lisp
-(use-package helm-buffers
-  :ensure nil
-  :after helm
-  :config
-  (setq-default
-   helm-buffers-fuzzy-matching t
-   helm-buffer-max-length nil)
-  (zenburn-with-color-variables
-    (set-face-attribute 'helm-buffer-directory nil
-                        :foreground zenburn-blue
-                        :background nil)
-    (set-face-attribute 'helm-buffer-size nil :foreground zenburn-fg-1)))
-
-(use-package helm-color
-  :ensure nil
-  :after helm)
-
-(use-package helm-command
-  :ensure nil
-  :after helm
-  :bind ([remap execute-extended-command] . helm-M-x)
-  :config
-  (setq-default helm-M-x-fuzzy-match t)
-  (zenburn-with-color-variables
-    (set-face-attribute 'helm-M-x-key nil :foreground zenburn-orange :underline nil)))
-
-(use-package helm-files
-  :ensure nil
-  :after helm
-  :config
-  (zenburn-with-color-variables
-    (set-face-attribute 'helm-ff-dotted-directory nil
-                        :background nil
-                        :foreground zenburn-fg-1)))
-
-(use-package helm-grep
-  :ensure nil
-  :after helm
-  :config
-  (zenburn-with-color-variables
-    (set-face-attribute 'helm-grep-lineno nil :foreground zenburn-yellow-2)))
-
-(use-package helm-misc
-  :ensure nil
-  :after helm
-  :bind ([remap switch-to-buffer] . helm-buffers-list))
-
-(use-package helm-lib
-  :ensure nil
-  :after helm
-  :config (setq-default helm-help-full-frame nil))
-
-(use-package helm-mode
-  :ensure nil
-  :after helm
-  :config
-  (setq-default
-   helm-completion-in-region-fuzzy-match t
-   helm-mode-fuzzy-match t))
-
-(use-package helm-net
-  :ensure nil
-  :after helm
-  :config (setq-default helm-net-prefer-curl (if (executable-find "curl") t nil)))
-
-(use-package helm-org
-  :ensure nil
-  :after helm
-  :config (setq-default helm-org-headings-fontify t))
-
-(use-package helm-regexp
-  :ensure nil
-  :after helm
-  :config
-  (zenburn-with-color-variables
-    (set-face-attribute 'helm-moccur-buffer nil :foreground zenburn-blue)))
-#+END_SRC
-
-** Helm Plugins
-
-Fourth-party packages for Helm.
-
-- *NOTE*: See https://github.com/ShingoFukuyama/helm-css-scss/issues/7.
-- *NOTE*: See https://github.com/ShingoFukuyama/helm-swoop/issues/114.
-- *TODO*: See https://github.com/bbatsov/zenburn-emacs/issues/220.
-
-#+BEGIN_SRC emacs-lisp
-(use-package helm-ag
-  :after helm
-  :bind
-  (:map helm-ag-map
-        ("<left>" . backward-char)
-        ("<right>" . forward-char))
-  :config (setq-default helm-ag-show-status-function nil))
-
-(use-package helm-css-scss
-  :after helm
-  :config (setq-default helm-css-scss-split-direction 'split-window-horizontally))
-
-(use-package helm-descbinds
-  :after helm
-  :config
-  (helm-descbinds-mode)
-  (setq-default helm-descbinds-window-style 'split-window))
-
-(use-package helm-describe-modes
-  :after helm
-  :bind ([remap describe-mode] . helm-describe-modes))
-
-(use-package helm-flycheck
-  :after helm)
-
-(use-package helm-projectile
-  :after helm
-  :config (helm-projectile-toggle 1))
-
-(use-package helm-swoop
-  :config
-  (setq-default
-   helm-swoop-move-to-line-cycle nil
-   helm-swoop-speed-or-color t
-   helm-swoop-split-direction 'split-window-horizontally)
-  (set-face-attribute 'helm-swoop-target-word-face nil
-                      :background 'unspecified
-                      :foreground 'unspecified
-                      :inherit 'isearch))
-#+END_SRC
-
 ** Help
 
 #+BEGIN_SRC emacs-lisp
@@ -882,7 +709,6 @@ it's like a minor mode that disables itself auto-magically.
   ("C-c e" . hydra-eyebrowse/body)
   ("C-c f" . hydra-flycheck/body)
   ("C-c g" . hydra-magit/body)
-  ("C-c h" . hydra-helm/body)
   ("C-c o" . hydra-org/body)
   ("C-c p" . hydra-projectile/body)
   ("C-c s" . hydra-system/body)
@@ -993,37 +819,6 @@ _q_ quit            _f_ fold            _<_ previous        _<tab>_ current
   ("K" vimish-fold-delete-all))
 #+END_SRC
 
-*** Helm
-
-Group Helm commands.
-
-- *TODO*: Make =helm-mdi=.
-
-#+BEGIN_SRC emacs-lisp
-(defhydra hydra-helm (:color blue)
-  "
-^
-^Helm^              ^Browse^            ^Do^
-^────^──────────────^──────^────────────^──^────────────────
-_q_ quit            _c_ colors          _f_ flycheck
-_r_ resume          _g_ google          _p_ swoop
-^^                  _h_ headings        _s_ css-scss
-^^                  _i_ imenu           ^^
-^^                  _k_ kill-ring       ^^
-^^                  ^^                  ^^
-"
-  ("q" nil)
-  ("c" helm-colors)
-  ("f" helm-flycheck)
-  ("g" helm-google-suggest)
-  ("h" helm-org-in-buffer-headings)
-  ("i" helm-imenu)
-  ("k" helm-show-kill-ring)
-  ("p" helm-swoop)
-  ("r" helm-resume)
-  ("s" helm-css-scss))
-#+END_SRC
-
 *** Magit
 
 Group Magit commands.
@@ -1093,15 +888,15 @@ _i_ reset cache     _K_ kill all        _D_ root            _s_ ag
 ^^                  ^^                  ^^                  ^^
 "
   ("q" nil)
-  ("b" helm-projectile-switch-to-buffer)
-  ("d" helm-projectile-find-dir)
+  ("b" projectile-switch-to-buffer)
+  ("d" projectile-find-dir)
   ("D" projectile-dired)
-  ("f" helm-projectile-find-file)
+  ("f" projectile-find-file)
   ("i" projectile-invalidate-cache :color red)
   ("K" projectile-kill-buffers)
-  ("p" helm-projectile-switch-project)
+  ("p" projectile-switch-project)
   ("r" projectile-replace)
-  ("s" helm-projectile-ag)
+  ("s" projectile-ag)
   ("S" projectile-save-project-buffers))
 #+END_SRC
 
@@ -1212,6 +1007,51 @@ Keep track of ERC buffers in which new messages have been posted.
   :after erc)
 #+END_SRC
 
+** Ivy, Counsel and Swiper
+
+#+BEGIN_QUOTE
+Ivy is a generic completion mechanism for Emacs. While it operates similarly to
+other completion schemes such as =icomplete-mode=, Ivy aims to be more
+efficient, smaller, simpler, and smoother to use yet highly customizable.
+
+[[https://github.com/abo-abo/swiper][Oleh Krehel]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+(use-package ivy
+  :defer 1
+  :config
+  (ivy-mode 1))
+#+END_SRC
+
+#+BEGIN_QUOTE
+Counsel takes this further, providing versions of common Emacs commands that are
+customised to make the best use of ivy. For example, =counsel-find-file= has
+some additional keybindings. Pressing =DEL= will move you to the parent
+directory.
+
+[[https://github.com/abo-abo/swiper][Oleh Krehel]]
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+(use-package counsel
+  :after ivy
+  :config
+  (when (eq system-type 'windows-nt)
+    (setq-default counsel-ag-base-command "ag --vimgrep --nocolor --nogroup %s"))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+Swiper is an alternative to isearch that uses ivy to show an overview of all
+matches.
+
+[[https://github.com/abo-abo/swiper][Oleh Krehel]]
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package swiper :after ivy)
+#+END_SRC
+
 ** Linters
 
 Flycheck lints warnings and errors directly within buffers. It can check a lot of
@@ -1254,10 +1094,6 @@ Here is how it looks (slightly deprecated):
 /In an inactive window/
 
 [[./screenshots/emacs.mode-line.inactive.png]]
-
-/When inside of a Helm session/
-
-[[./screenshots/emacs.mode-line.helm.png]]
 
 /When using isearch/
 
@@ -1321,14 +1157,6 @@ fun and profit.
                         (pop buffer)))
               erc-modified-channels-alist)))
 
-  (spaceline-define-segment me/helm-follow
-    "Show `helm-follow-mode' status."
-    (if (and (bound-and-true-p helm-alive-p)
-             spaceline--helm-current-source
-             (eq 1 (cdr (assq 'follow spaceline--helm-current-source))))
-        (propertize (mdi "eye") 'face 'success)
-      (propertize (mdi "eye-off") 'face 'warning)))
-
   (spaceline-define-segment me/selection-info
     "Show the size of current region."
     (when mark-active
@@ -1367,7 +1195,6 @@ fun and profit.
    spaceline-flycheck-bullet (format "%s %s" (mdi "record") "%s")
    spaceline-separator-dir-left '(left . left)
    spaceline-separator-dir-right '(right . right))
-  (spaceline-helm-mode)
 
   ;; Build the mode-lines
   (spaceline-install
@@ -1380,15 +1207,6 @@ fun and profit.
      ((projectile-root me/version-control) :separator (mdi "source-branch" t))
      (workspace-number)
      (global :face highlight-face)))
-  (spaceline-install
-   'helm
-   '((helm-buffer-id :face spaceline-read-only)
-     (helm-number)
-     (me/helm-follow)
-     (helm-prefix-argument))
-   '((me/erc-track :face spaceline-highlight-face :when active)
-     (workspace-number)
-     (global :face spaceline-read-only)))
 
   ;; Customize the mode-line
   (zenburn-with-color-variables
@@ -1848,7 +1666,7 @@ performance sake an indexing mechanism backed by external commands exists as wel
   :config
   (projectile-global-mode)
   (setq-default
-   projectile-completion-system 'helm
+   projectile-completion-system 'ivy
    projectile-enable-caching t
    projectile-mode-line '(:eval (projectile-project-name))))
 #+END_SRC

@@ -36,7 +36,7 @@ git clone https://github.com/angrybacon/dotemacs.git ~/.emacs.d/
 
 ** Ag
 
-My Helm setup uses =ag= instead of =grep= to lookup files.
+My Ivy setup uses =ag= instead of =grep= to lookup files.
 
 #+BEGIN_SRC sh
 sh brew install the_silver_searcher
